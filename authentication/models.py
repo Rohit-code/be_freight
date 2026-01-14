@@ -14,6 +14,12 @@ class User(AbstractUser):
     google_refresh_token = models.TextField(blank=True, null=True, help_text="Google OAuth refresh token")
     google_token_expiry = models.DateTimeField(blank=True, null=True, help_text="Access token expiry time")
     
+    # Google service connection flags
+    gmail_connected = models.BooleanField(default=False)
+    drive_connected = models.BooleanField(default=False)
+    sheets_connected = models.BooleanField(default=False)
+    docs_connected = models.BooleanField(default=False)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

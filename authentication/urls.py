@@ -6,6 +6,7 @@ app_name = 'authentication'
 urlpatterns = [
     # Authentication endpoints
     path('login', views.login_view, name='login'),
+    path('signup', views.signup_view, name='signup'),
     path('google', views.google_oauth_initiate_view, name='google_oauth_initiate'),
     path('google/callback', views.google_oauth_callback_view, name='google_oauth_callback'),
     path('google/verify', views.google_verify_view, name='google_verify'),  # Keep for backward compatibility

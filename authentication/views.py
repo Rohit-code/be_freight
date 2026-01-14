@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 from decouple import config
-from .serializers import UserSerializer, LoginSerializer, GoogleAuthSerializer
+from .serializers import UserSerializer, LoginSerializer, SignupSerializer, GoogleAuthSerializer
 from .utils import (
     generate_jwt_token, 
     verify_google_token, 
@@ -36,6 +36,33 @@ def login_view(request):
             'token': token,
         }, status=status.HTTP_200_OK)
     
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def signup_view(request):
+    """User registration endpoint"""
+    serializer = SignupSerializer(data=request.data)
+    
+    if serializer.is_valid():
+        try:
+            user = serializer.save()
+            token = generate_jwt_token(user)
+            return Response({
+                'user': UserSerializer(user).data,
+                'token': token,
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(f"[ERROR] signup_view: Error creating user: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return Response(
+                {'error': f'Failed to create user: {str(e)}'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    
+    print(f"[ERROR] signup_view: Validation errors: {serializer.errors}")
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
