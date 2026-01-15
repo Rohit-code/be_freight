@@ -63,19 +63,16 @@ def get_google_oauth_flow(request):
     if not google_client_id or not google_client_secret:
         raise ValueError('Google Client ID or Secret not configured')
     
-    # OAuth 2.0 scopes - minimal scopes for Gmail, Sheets, Docs, Drive APIs
+    # OAuth 2.0 scopes - minimal scopes per current requirements
     scopes = [
         'openid',
         'https://www.googleapis.com/auth/userinfo.email',
         'https://www.googleapis.com/auth/userinfo.profile',
-        # Gmail API - modify scope includes readonly and send
-        'https://www.googleapis.com/auth/gmail.modify',
-        # Google Sheets API - full access includes readonly
-        'https://www.googleapis.com/auth/spreadsheets',
-        # Google Docs API - full access includes readonly
-        'https://www.googleapis.com/auth/documents',
-        # Google Drive API - full access includes readonly and file
-        'https://www.googleapis.com/auth/drive',
+        # Gmail API - readonly + send
+        'https://www.googleapis.com/auth/gmail.readonly',
+        'https://www.googleapis.com/auth/gmail.send',
+        # Google Drive API - readonly only
+        'https://www.googleapis.com/auth/drive.readonly',
     ]
     
     try:
