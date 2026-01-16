@@ -88,7 +88,7 @@ def google_oauth_initiate_view(request):
         # Get authorization URL
         authorization_url, returned_state = flow.authorization_url(
             access_type='offline',
-            include_granted_scopes='true',
+            include_granted_scopes='false',
             state=state,
             prompt='consent'
         )
